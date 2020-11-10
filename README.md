@@ -1,2 +1,2 @@
 # [TechNotes](https://github.com/Chromosom3/TechNotes/wiki)
-My tech related notes from class, projects, and online courses.
+This repository will be used to store notes for my classes under the wiki section as well as any scrips that I create for class. 
