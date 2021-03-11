@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Script: blog-setup.sh
+# Script: secure-ssh.sh
 # Author: Dylan 'Chromosome' Navarro
 # Description: This script is designed to automate the process of securing SSH for my SYS265 class.
 # The script creates a new user, downloads SSH public key and puts in the users authorized_keys, then disables root SSH.
