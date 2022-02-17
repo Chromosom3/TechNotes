@@ -1,1 +1,266 @@
-#
+firewall {
+    name DMZ-to-LAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            state {
+                established enable
+            }
+        }
+        rule 10 {
+            action accept
+            description "Allow DMZ to Log01"
+            destination {
+                address 172.16.200.10
+            }
+            protocol udp
+        }
+    }
+    name DMZ-to-WAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            state {
+                established enable
+            }
+        }
+    }
+    name LAN-to-DMZ {
+        default-action drop
+        enable-default-log
+        rule 10 {
+            action accept
+            description "Allow access to web server from LAN"
+            destination {
+                address 172.16.50.3
+                port 80
+            }
+            protocol tcp
+        }
+    }
+    name LAN-to-WAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+        }
+    }
+    name WAN-to-DMZ {
+        default-action drop
+        enable-default-log
+        rule 10 {
+            action accept
+            description "Allow WAN Access to Web01 HTTP"
+            destination {
+                address 172.16.50.3
+                port 80
+            }
+            protocol tcp
+        }
+    }
+    name WAN-to-LAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            state {
+                established enable
+            }
+        }
+    }
+}
+interfaces {
+    ethernet eth0 {
+        address 10.0.17.137/24
+        description SEC350-WAN
+        hw-id 00:50:56:b3:ba:a3
+    }
+    ethernet eth1 {
+        address 172.16.50.2/29
+        description DYLAN-DMZ
+        hw-id 00:50:56:b3:1d:c3
+    }
+    ethernet eth2 {
+        address 172.16.150.2/24
+        description DYLAN-LAN
+        hw-id 00:50:56:b3:23:13
+    }
+    loopback lo {
+    }
+}
+nat {
+    source {
+        rule 10 {
+            description "NAT FROM DMZ to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.50.0/29
+            }
+            translation {
+                address masquerade
+            }
+        }
+        rule 20 {
+            description "NAT from LAN to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.150.0/24
+            }
+            translation {
+                address masquerade
+            }
+        }
+        rule 30 {
+            description "NAT from MGMT to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.200.0/28
+            }
+            translation {
+                address masquerade
+            }
+        }
+    }
+}
+protocols {
+    rip {
+        interface eth2 {
+        }
+        network 172.16.50.0/29
+    }
+    static {
+        route 0.0.0.0/0 {
+            next-hop 10.0.17.2 {
+            }
+        }
+    }
+}
+service {
+    dns {
+        forwarding {
+            allow-from 172.16.50.0/29
+            allow-from 172.16.150.0/24
+            listen-address 172.16.50.2
+            listen-address 172.16.150.2
+            system
+        }
+    }
+    ssh {
+        listen-address 0.0.0.0
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    conntrack {
+        modules {
+            ftp
+            h323
+            nfs
+            pptp
+            sip
+            sqlnet
+            tftp
+        }
+    }
+    console {
+        device ttyS0 {
+            speed 115200
+        }
+    }
+    host-name fw01-dylan
+    login {
+        user dylan {
+            authentication {
+                encrypted-password $6$GjI5gTy4dCjZQu.J$cwvvPyrbpOocapVeNpXmXaNwteAw6NAiYODAGETegYHB10pvJxpQ5GXduDFf.5bbeqeFS08CAjnqAGi6QZOgh/
+                public-keys rw01-dylan {
+                    key AAAAB3NzaC1yc2EAAAADAQABAAABgQDgUTJmWlC89viPzYbAZho3nDkUK0Y3MiwqXCtLQW3CtkMMC37HT9ltwX/pPo5Kgjsi92XOAdNNg6DqsYf7uWehsFZNgn8CbBWYnsPW6bw33f+TjC/VJsXqrhKUDxKOwQpXwMx7IMO9tPbQAjf6HeXntMLXSoe9Si14s/I/QoGVPlwwMxbtjcL+EnxODroVsOBQQf99jwNwmf4uayh+Of3vjqBARGNNOPHYYG2BBx9g0xSTTztYOKpVwR9nG6Y8LayS/TLH/0Kd8wvOITLcDBRZztDd70pS1T/Q1FY/9yVr8pe3TpSi3vXGM9I0EhWV3fwdXUwgQLrHg3rHxOojtyqqAEKpSi1aHHx0LzkfggfupPLRO4MYTZB36MTXmpcFiO0U57eynseMnu2Zuq7DzikftdO0muXckfGFV/vsvj7lX0+HtiqGB82Hz4HZJDuD1tvEWCt0yrDmQNw8AujUtZh5m3gcxuGrzR/VUOjSW3uwUya6VCjpzdrJN79IsLQ7T4E=
+                    type ssh-rsa
+                }
+            }
+            full-name "Dylan Navarro"
+        }
+        user vyos {
+            authentication {
+                encrypted-password $6$iFCDE5rAQ4ubo6YU$PDTld7vum760MzTIrNdqyms6kHy8wR79GtleTeqewE/LwcMmqGP8ce899ZD7PH/QAda32eQ6BlE7joRSHwixV/
+            }
+        }
+    }
+    name-server 10.0.17.2
+    ntp {
+        server time1.vyos.net {
+        }
+        server time2.vyos.net {
+        }
+        server time3.vyos.net {
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+        host 172.16.50.5 {
+            facility authpriv {
+            }
+        }
+        host 172.16.200.10 {
+            facility authpriv {
+                level info
+            }
+        }
+    }
+}
+zone-policy {
+    zone DMZ {
+        from LAN {
+            firewall {
+                name LAN-to-DMZ
+            }
+        }
+        from WAN {
+            firewall {
+                name WAN-to-DMZ
+            }
+        }
+        interface eth1
+    }
+    zone LAN {
+        from DMZ {
+            firewall {
+                name DMZ-to-LAN
+            }
+        }
+        from WAN {
+            firewall {
+                name WAN-to-LAN
+            }
+        }
+        interface eth2
+    }
+    zone WAN {
+        from DMZ {
+            firewall {
+                name DMZ-to-WAN
+            }
+        }
+        from LAN {
+            firewall {
+                name LAN-to-WAN
+            }
+        }
+        interface eth0
+    }
+}
+
+
+// Warning: Do not remove the following line.
+// vyos-config-version: "bgp@2:broadcast-relay@1:cluster@1:config-management@1:conntrack@3:conntrack-sync@2:dhcp-relay@2:dhcp-server@6:dhcpv6-server@1:dns-forwarding@3:firewall@7:flow-accounting@1:https@3:interfaces@25:ipoe-server@1:ipsec@8:isis@1:l2tp@4:lldp@1:mdns@1:nat@5:nat66@1:ntp@1:openconnect@1:ospf@1:policy@2:pppoe-server@5:pptp@2:qos@1:quagga@9:rpki@1:salt@1:snmp@2:ssh@2:sstp@4:system@22:vrf@3:vrrp@3:vyos-accel-ppp@2:wanloadbalance@3:webproxy@2"
+// Release version: 1.4-rolling-202202030910
