@@ -22,9 +22,6 @@ firewall {
         enable-default-log
         rule 1 {
             action accept
-            state {
-                established enable
-            }
         }
         rule 10 {
             action accept
