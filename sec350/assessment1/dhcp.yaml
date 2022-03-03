@@ -1,0 +1,10 @@
+network:
+  ethernets:
+    ens160:
+      dhcp4: false
+      addresses: [172.16.150.5/24]
+      gateway4: 172.16.150.2
+      nameservers:
+          search: [dylan.local]
+          addresses: [172.16.200.11,1.1.1.1]
+  version: 2
