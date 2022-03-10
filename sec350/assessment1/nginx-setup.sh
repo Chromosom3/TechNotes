@@ -21,4 +21,6 @@ systemctl restart rsyslog
 apt update
 sudp apt upgrade -y
 apt install nginx -y
+rm /var/www/html/index.nginx-debian.html
+curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/index.html > /var/www/html/index.html
 systemctl enable nginx --now
