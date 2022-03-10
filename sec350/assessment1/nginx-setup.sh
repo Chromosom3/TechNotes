@@ -9,7 +9,7 @@ useradd dylan -s /bin/bash
 usermod -aG sudo dylan
 passwd dylan
 
-hostnamectl set-hostname nginx-dylan
+hostnamectl set-hostname nginx01-dylan
 
 rm /etc/netplan/00-installer-config.yaml
 curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/nginx.yaml > /etc/netplan/00-installer-config.yaml
