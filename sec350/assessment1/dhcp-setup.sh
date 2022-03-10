@@ -18,7 +18,7 @@ rm /etc/netplan/00-installer-config.yaml
 curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/dhcp.yaml > /etc/netplan/00-installer-config.yaml
 netplan apply
 
-curl https://github.com/Chromosom3/TechNotes/blob/main/sec350/assessment1/sec350.conf > /etc/rsyslog.d/sec350.conf
+curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/sec350.conf > /etc/rsyslog.d/sec350.conf
 systemctl restart rsyslog
 
 # Let's get the service setup now
