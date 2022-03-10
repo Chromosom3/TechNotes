@@ -63,6 +63,11 @@ firewall {
                 address 172.16.200.11
             }
         }
+        rule 30 {
+            action accept
+            description "Allow ICMP ping to DMZ"
+            protocol icmp
+        }
     }
     name LAN-to-WAN {
         default-action drop
