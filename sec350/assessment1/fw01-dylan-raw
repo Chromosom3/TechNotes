@@ -228,7 +228,7 @@ system {
             speed 115200
         }
     }
-    host-name fw01-dylan
+    host-name edge01-dylan
     login {
         user dylan {
             authentication {
