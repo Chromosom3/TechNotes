@@ -15,6 +15,9 @@ rm /etc/netplan/00-installer-config.yaml
 curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/nginx.yaml > /etc/netplan/00-installer-config.yaml
 netplan apply
 
+curl https://raw.githubusercontent.com/Chromosom3/TechNotes/main/sec350/assessment1/sec350.conf > /etc/rsyslog.d/sec350.conf
+systemctl restart rsyslog
+
 apt update
 sudp apt upgrade -y
 apt install nginx -y
