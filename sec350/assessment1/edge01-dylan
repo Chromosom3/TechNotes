@@ -119,17 +119,17 @@ interfaces {
     ethernet eth0 {
         address 10.0.17.137/24
         description SEC350-WAN
-        hw-id 00:50:56:b3:ba:a3
+        hw-id 00:50:56:b3:64:a2
     }
     ethernet eth1 {
         address 172.16.50.2/29
         description DYLAN-DMZ
-        hw-id 00:50:56:b3:1d:c3
+        hw-id 00:50:56:b3:7d:5b
     }
     ethernet eth2 {
         address 172.16.150.2/24
         description DYLAN-LAN
-        hw-id 00:50:56:b3:23:13
+        hw-id 00:50:56:b3:57:b7
     }
     loopback lo {
     }
