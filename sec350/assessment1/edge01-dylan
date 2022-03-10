@@ -16,6 +16,14 @@ firewall {
             }
             protocol udp
         }
+        rule 20 {
+            action accept
+            description "Allow ICMP ping to Log01"
+            destination {
+                address 172.16.200.10
+            }
+            protocol icmp
+        }
     }
     name DMZ-to-WAN {
         default-action drop
