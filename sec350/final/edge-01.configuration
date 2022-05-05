@@ -1,0 +1,397 @@
+firewall {
+    name DMZ-to-LAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established connection back to the DMZ"
+            state {
+                established enable
+            }
+        }
+    }
+    name DMZ-to-MGMT {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established connection back to MGMT"
+            state {
+                established enable
+            }
+        }
+        rule 10 {
+            action accept
+            description "Allow connections to DNS"
+            destination {
+                address 172.16.200.4
+                port 53
+            }
+            protocol udp
+        }
+        rule 20 {
+            action accept
+            description "Allow connections to Elastic"
+            destination {
+                address 172.16.200.3
+                port 9200
+            }
+            protocol tcp
+        }
+        rule 30 {
+            action accept
+            description "Allow connections to Kibana"
+            destination {
+                address 172.16.200.3
+                port 5601
+            }
+            protocol tcp
+        }
+    }
+    name DMZ-to-WAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow DMZ to Internet"
+        }
+    }
+    name LAN-to-DMZ {
+        default-action drop
+        enable-default-log
+        rule 10 {
+            action accept
+            description "Allow Access to webserver from LAN"
+            destination {
+                address 172.16.50.3
+                port 80
+            }
+            protocol tcp
+        }
+        rule 20 {
+            action accept
+            description "Allow Access to webserver SSL from LAN"
+            destination {
+                address 172.16.50.3
+                port 443
+            }
+            protocol tcp
+        }
+    }
+    name LAN-to-MGMT {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established connection back to MGMT"
+            state {
+                established enable
+            }
+        }
+        rule 10 {
+            action accept
+            description "Allow connections to AD Server"
+            destination {
+                address 172.16.200.4
+            }
+            source {
+                address 172.16.150.100-172.16.150.200
+            }
+        }
+        rule 20 {
+            action accept
+            description "Allow connections to Elastic"
+            destination {
+                address 172.16.200.3
+                port 9200
+            }
+            protocol tcp
+        }
+        rule 30 {
+            action accept
+            description "Allow connections to Kibana"
+            destination {
+                address 172.16.200.3
+                port 5601
+            }
+            protocol tcp
+        }
+    }
+    name LAN-to-WAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow LAN to Internet"
+        }
+    }
+    name MGMT-to-DMZ {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow MGMT to DMZ"
+        }
+    }
+    name MGMT-to-LAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow MGMT to LAN"
+        }
+    }
+    name MGMT-to-WAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow MGMT to Internet"
+        }
+    }
+    name WAN-to-DMZ {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established internet connections"
+            state {
+                established enable
+            }
+        }
+    }
+    name WAN-to-LAN {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established internet connections"
+            state {
+                established enable
+            }
+        }
+    }
+    name WAN-to-MGMT {
+        default-action drop
+        enable-default-log
+        rule 1 {
+            action accept
+            description "Allow established internet connections"
+            state {
+                established enable
+            }
+        }
+    }
+}
+interfaces {
+    ethernet eth0 {
+        address 10.0.17.108/24
+        description SEC350-WAN
+        hw-id 00:50:56:b3:f5:5c
+    }
+    ethernet eth1 {
+        address 172.16.50.2/29
+        description DMZ
+        hw-id 00:50:56:b3:82:27
+    }
+    ethernet eth2 {
+        address 172.16.150.2/24
+        description LAN
+        hw-id 00:50:56:b3:7f:76
+    }
+    ethernet eth3 {
+        address 172.16.200.2/28
+        description MGMT
+        hw-id 00:50:56:b3:f7:8d
+    }
+    loopback lo {
+    }
+}
+nat {
+    source {
+        rule 10 {
+            description "NAT From DMZ to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.50.0/29
+            }
+            translation {
+                address masquerade
+            }
+        }
+        rule 11 {
+            description "NAT from LAN to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.150.0/24
+            }
+            translation {
+                address masquerade
+            }
+        }
+        rule 12 {
+            description "NAT from MGMT to WAN"
+            outbound-interface eth0
+            source {
+                address 172.16.200.0/28
+            }
+            translation {
+                address masquerade
+            }
+        }
+    }
+}
+protocols {
+    static {
+        route 0.0.0.0/0 {
+            next-hop 10.0.17.2 {
+            }
+        }
+    }
+}
+service {
+    dns {
+        forwarding {
+            allow-from 172.16.50.0/29
+            allow-from 172.16.150.0/24
+            allow-from 172.16.200.0/28
+            listen-address 172.16.50.2
+            listen-address 172.16.150.2
+            listen-address 172.16.200.2
+            system
+        }
+    }
+    ssh {
+        listen-address 0.0.0.0
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    conntrack {
+        modules {
+            ftp
+            h323
+            nfs
+            pptp
+            sip
+            sqlnet
+            tftp
+        }
+    }
+    console {
+    }
+    host-name edge-01
+    login {
+        user admin {
+            authentication {
+                encrypted-password $6$LloQZZELboJTLL/i$nBFpM/DzODJM55YVVT1B/Y6yhJkjlaUO0c/X0unzYm31jXzdRXiNkdrZwD4ijLL7UqcaG1MXxvgd9z1EIqSxS0
+            }
+            full-name Administrator
+        }
+        user vyos {
+            authentication {
+                encrypted-password $6$FkQZ1OwvF4OQNc16$tme1TynNrloi2qv5t3RwQQsDizkkY4H2vEZOMNaJwCBvhCvpBsP.B5VvOEJ1rJfQiAOt/E/7ahzKThxKKse/E/
+            }
+        }
+    }
+    name-server 10.0.17.2
+    ntp {
+        server time1.vyos.net {
+        }
+        server time2.vyos.net {
+        }
+        server time3.vyos.net {
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+}
+zone-policy {
+    zone DMZ {
+        from LAN {
+            firewall {
+                name LAN-to-DMZ
+            }
+        }
+        from MGMT {
+            firewall {
+                name MGMT-to-DMZ
+            }
+        }
+        from WAN {
+            firewall {
+                name WAN-to-DMZ
+            }
+        }
+        interface eth1
+    }
+    zone LAN {
+        from DMZ {
+            firewall {
+                name DMZ-to-LAN
+            }
+        }
+        from MGMT {
+            firewall {
+                name MGMT-to-LAN
+            }
+        }
+        from WAN {
+            firewall {
+                name WAN-to-LAN
+            }
+        }
+        interface eth2
+    }
+    zone MGMT {
+        from DMZ {
+            firewall {
+                name DMZ-to-MGMT
+            }
+        }
+        from LAN {
+            firewall {
+                name LAN-to-MGMT
+            }
+        }
+        from WAN {
+            firewall {
+                name WAN-to-MGMT
+            }
+        }
+        interface eth3
+    }
+    zone WAN {
+        from DMZ {
+            firewall {
+                name DMZ-to-WAN
+            }
+        }
+        from LAN {
+            firewall {
+                name LAN-to-WAN
+            }
+        }
+        from MGMT {
+            firewall {
+                name MGMT-to-WAN
+            }
+        }
+        interface eth0
+    }
+}
+
+
+// Warning: Do not remove the following line.
+// vyos-config-version: "bgp@2:broadcast-relay@1:cluster@1:config-management@1:conntrack@3:conntrack-sync@2:dhcp-relay@2:dhcp-server@6:dhcpv6-server@1:dns-forwarding@3:firewall@7:flow-accounting@1:https@3:interfaces@25:ipoe-server@1:ipsec@8:isis@1:l2tp@4:lldp@1:mdns@1:nat@5:nat66@1:ntp@1:openconnect@1:ospf@1:policy@2:pppoe-server@5:pptp@2:qos@1:quagga@9:rpki@1:salt@1:snmp@2:ssh@2:sstp@4:system@22:vrf@3:vrrp@3:vyos-accel-ppp@2:wanloadbalance@3:webproxy@2"
+// Release version: 1.4-rolling-202202030910
