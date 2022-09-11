@@ -1,4 +1,11 @@
 #!/bin/bash
+# Script: portscanner.sh
+# Author: Dylan 'Chromosome' Navarro
+# Description: This is a modified version of the scanning file provided in class.
+# Argumants:
+# - hostfile: a file containing a list of IPs or a list of hostnames.
+# - portfile: a file containing a list of ports to scan on each host.
+# - format: can choose between detailed format or csv (default) format.
 
 if [ $# -eq 0 ]
 then 
