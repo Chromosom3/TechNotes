@@ -8,5 +8,5 @@ dns_server=$2
 echo "DNS Resolution for $subnet.0/24"
 for host in $(seq 1 254); do
     full_ip="$subnet.$host"   
-    nslookup $full_ip $dns_server 
+    nslookup $full_ip $dns_server | awk '$2 == "name" {print}'
 done
