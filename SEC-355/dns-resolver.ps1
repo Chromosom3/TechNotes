@@ -1,4 +1,4 @@
-# Script: powershell-dns.ps1
+# Script: dns-resolver.ps1
 # Author: Dylan 'Chromosome' Navarro
 # Description: This script is designed to allow you to scan the DNS entries for a network range.
 # Example Usage: ./powershell-dns.ps1 192.168.4.4 192.168.3 24
