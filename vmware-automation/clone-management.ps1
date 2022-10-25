@@ -2,6 +2,7 @@
 # Author: Dylan 'Chromosom3' Navarro
 # Description: Used to manage cloning of VMs in ESXi without vCenter Server
 # Needs PowerCLI Installed (Install-Module -Name VMware.PowerCLI)
+# Needs Posh-SSH Installed (Install-Module -Name Posh-SSH)
 
 function Connect {
     # Connection Information
@@ -35,8 +36,9 @@ function Menu {
     
     switch ($selection)
     {
-        1 {"It is one."}
+        1 {Get-VM | Select-Object Name, Id; Menu}
         2 {"It is two."}
+        19 {exit}
         20 {Disconnect}
     }
 }
