@@ -27,6 +27,21 @@ function Disconnect {
     Disconnect-VIServer -Server * -Force -Confirm:$false
 }
 
+function LinkedClones {
+    $ssh = New-SSHSession -ComputerName $esxi_ip -Credential $esxi_account -AcceptKey -KeepAliveInterval 5 -Verbose
+    $vm_id = Read-Host "What is the VM ID?"
+    $vm_info = Get-VM -Id "VirtualMachine-$vm_id" | Select-Object *
+    $cmds = @(
+        "vim-cmd vmsvc/snapshot.create $vm_id 'Base Template' 'Linked Clones Use This!'"
+    )
+    Write-Host($vm_info)
+    # foreach ($cmd in $cmds) {
+    #     Write-Host($cmd)
+    #     Invoke-SSHCommand -SessionId $ssh.SessionId -Command $cmd -TimeOut 30 | Select-Object Output
+    # }
+    Remove-SSHSession -SessionId $ssh.SessionId
+}
+
 function Menu {
     try {
         [uint16]$selection = Read-Host("[1] List VMs`n[2] Create Linked Clone`nSelection")
@@ -37,7 +52,7 @@ function Menu {
     switch ($selection)
     {
         1 {Get-VM | Select-Object Name, Id; Menu}
-        2 {"It is two."}
+        2 {LinkedClones;}
         19 {exit}
         20 {Disconnect}
     }
