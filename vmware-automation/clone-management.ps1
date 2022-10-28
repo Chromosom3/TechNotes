@@ -28,18 +28,27 @@ function Disconnect {
 }
 
 function LinkedClones {
-    $ssh = New-SSHSession -ComputerName $esxi_ip -Credential $esxi_account -AcceptKey -KeepAliveInterval 5 -Verbose
-    $vm_id = Read-Host "What is the VM ID?"
-    $vm_info = Get-VM -Id "VirtualMachine-$vm_id" | Select-Object *
+    #$ssh = New-SSHSession -ComputerName $esxi_ip -Credential $esxi_account -AcceptKey -KeepAliveInterval 5 -Verbose
+    $vm_id = Read-Host "What is the template VM ID?"
+    $vm_info = Get-VM -Id "VirtualMachine-$vm_id"
+    $data_store = (Get-Datastore)[0].Name
+    New-Snapshot -VM $vm_info  -Name "Base Template" -Description "This is what linked clones are based on."
+    $snapshot_id = ((Get-Snapshot -VM $vm_info -Name "Base Template").Id).Split("-")[-1]
+    $new_name = Read-Host "What is the name for the linked clone?"
+    $old_name = $vm_info.Name
+    $new_vm = New-VM -Name $new_name -NumCpu $vm_info.NumCpu -MemoryGB $vm_info.MemoryGB -DiskGB 1
+    $new_vm | Get-HardDisk | Remove-HardDisk -Confirm:$false
+    Write-Host("$data_store`n`n`n$snapshot_id")
     $cmds = @(
-        "vim-cmd vmsvc/snapshot.create $vm_id 'Base Template' 'Linked Clones Use This!'"
+        "mkdir $data_store/$new_name",
+        "cp $datastore/$old_name/$old_name.vmdk $datastore/$new_name/$new_name.vmdk ",
+        "cp $datastore/$old_name/$old_name.vmx $datastore/$new_name/$new_name.vmx"
     )
-    Write-Host($vm_info)
     # foreach ($cmd in $cmds) {
     #     Write-Host($cmd)
     #     Invoke-SSHCommand -SessionId $ssh.SessionId -Command $cmd -TimeOut 30 | Select-Object Output
     # }
-    Remove-SSHSession -SessionId $ssh.SessionId
+    #Remove-SSHSession -SessionId $ssh.SessionId
 }
 
 function Menu {
