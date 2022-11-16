@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+	<!--
+	API Monitor Filter
+	(c) 2010-2013, Rohitab Batra <rohitab@rohitab.com>
+	http://www.rohitab.com/apimonitor/
+	-->
+<ApiMonitor>
+	<CaptureFilter>
+		<Module Name="Advapi32.dll">
+			<Api Name="CreateProcessAsUserA"/>
+			<Api Name="CreateProcessAsUserW"/>
+			<Api Name="CreateProcessWithLogonW"/>
+			<Api Name="CreateProcessWithTokenW"/>
+			<Api Name="DuplicateToken"/>
+			<Api Name="DuplicateTokenEx"/>
+			<Api Name="ImpersonateLoggedOnUser"/>
+			<Api Name="LogonUserA"/>
+			<Api Name="LogonUserExA"/>
+			<Api Name="LogonUserExExW"/>
+			<Api Name="LogonUserExW"/>
+			<Api Name="LogonUserW"/>
+		</Module>
+		<Module Name="CsrSrv.dll">
+			<Api Name="CsrCreateProcess"/>
+			<Api Name="CsrCreateRemoteThread"/>
+		</Module>
+		<Interface Name="IBackgroundCopyJob">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IBackgroundCopyJob2">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IBackgroundCopyJob3">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IBackgroundCopyJob4">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IBinding">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IDebugAdvanced">
+			<Api Name="SetThreadContext"/>
+		</Interface>
+		<Interface Name="IDebugAdvanced2">
+			<Api Name="SetThreadContext"/>
+		</Interface>
+		<Interface Name="IDebugAdvanced3">
+			<Api Name="SetThreadContext"/>
+		</Interface>
+		<Interface Name="IDebugClient">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateProcessAndAttach"/>
+		</Interface>
+		<Interface Name="IDebugClient2">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateProcessAndAttach"/>
+		</Interface>
+		<Interface Name="IDebugClient3">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateProcessAndAttach"/>
+			<Api Name="CreateProcessAndAttachWide"/>
+			<Api Name="CreateProcessWide"/>
+		</Interface>
+		<Interface Name="IDebugClient4">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateProcessAndAttach"/>
+			<Api Name="CreateProcessAndAttachWide"/>
+			<Api Name="CreateProcessWide"/>
+		</Interface>
+		<Interface Name="IDebugClient5">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateProcess2"/>
+			<Api Name="CreateProcess2Wide"/>
+			<Api Name="CreateProcessAndAttach"/>
+			<Api Name="CreateProcessAndAttach2"/>
+			<Api Name="CreateProcessAndAttach2Wide"/>
+			<Api Name="CreateProcessAndAttachWide"/>
+			<Api Name="CreateProcessWide"/>
+		</Interface>
+		<Interface Name="IDebugEventCallbacks">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateThread"/>
+		</Interface>
+		<Interface Name="IDebugEventCallbacksWide">
+			<Api Name="CreateProcess"/>
+			<Api Name="CreateThread"/>
+		</Interface>
+		<Interface Name="IDvdControl">
+			<Api Name="Resume"/>
+			<Api Name="StopForResume"/>
+		</Interface>
+		<Interface Name="IDvdControl2">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IFileOperationProgressSink">
+			<Api Name="ResumeTimer"/>
+		</Interface>
+		<Interface Name="IHandlerActivationHost">
+			<Api Name="BeforeCreateProcess"/>
+		</Interface>
+		<Interface Name="IInternetProtocol">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IInternetProtocolEx">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IInternetProtocolRoot">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IOperationsProgressDialog">
+			<Api Name="ResumeTimer"/>
+		</Interface>
+		<Interface Name="IPackageDebugSettings">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IRunnableTask">
+			<Api Name="Resume"/>
+		</Interface>
+		<Interface Name="IWbemBackupRestoreEx">
+			<Api Name="Resume"/>
+		</Interface>
+		<Module Name="Kernel32.dll">
+			<Api Name="CreateProcessA"/>
+			<Api Name="CreateProcessW"/>
+			<Api Name="CreateRemoteThread"/>
+			<Api Name="CreateRemoteThreadEx"/>
+			<Api Name="CreateThread"/>
+			<Api Name="DeleteCriticalSection"/>
+			<Api Name="EnterCriticalSection"/>
+			<Api Name="InitializeCriticalSection"/>
+			<Api Name="InitializeCriticalSectionAndSpinCount"/>
+			<Api Name="InitializeCriticalSectionEx"/>
+			<Api Name="IsSystemResumeAutomatic"/>
+			<Api Name="LeaveCriticalSection"/>
+			<Api Name="LeaveCriticalSectionWhenCallbackReturns"/>
+			<Api Name="LoadLibraryA"/>
+			<Api Name="LoadLibraryExA"/>
+			<Api Name="LoadLibraryExW"/>
+			<Api Name="LoadLibraryW"/>
+			<Api Name="LoadModule"/>
+			<Api Name="LoadPackagedLibrary"/>
+			<Api Name="ResumeThread"/>
+			<Api Name="SetThreadContext"/>
+			<Api Name="VirtualAlloc"/>
+			<Api Name="VirtualAllocEx"/>
+			<Api Name="VirtualAllocExNuma"/>
+			<Api Name="Wow64SetThreadContext"/>
+			<Api Name="WriteProcessMemory"/>
+		</Module>
+		<Module Name="mscoree.dll">
+			<Api Name="LoadLibraryShim"/>
+		</Module>
+		<Module Name="Netapi32.dll">
+			<Api Name="NetUserEnum"/>
+		</Module>
+		<Module Name="NSPR4.DLL">
+			<Api Name="PR_CreateProcess"/>
+			<Api Name="PR_LoadLibrary"/>
+			<Api Name="PR_UnloadLibrary"/>
+		</Module>
+		<Module Name="Ntdll.dll">
+			<Api Name="NtAlertResumeThread"/>
+			<Api Name="NtCreateProcess"/>
+			<Api Name="NtCreateProcessEx"/>
+			<Api Name="NtCreateThread"/>
+			<Api Name="NtCreateThreadEx"/>
+			<Api Name="NtCreateUserProcess"/>
+			<Api Name="NtDuplicateToken"/>
+			<Api Name="NtOpenProcess"/>
+			<Api Name="NtOpenThread"/>
+			<Api Name="NtResumeProcess"/>
+			<Api Name="NtResumeThread"/>
+			<Api Name="NtUnmapViewOfSection"/>
+			<Api Name="RtlCreateProcessParameters"/>
+			<Api Name="RtlCreateProcessParametersEx"/>
+			<Api Name="RtlCreateProcessReflection"/>
+			<Api Name="RtlWow64GetThreadContext"/>
+			<Api Name="RtlWow64SetThreadContext"/>
+		</Module>
+		<Module Name="Ole32.dll">
+			<Api Name="CoLoadLibrary"/>
+		</Module>
+		<Module Name="Secur32.dll">
+			<Api Name="LsaLogonUser"/>
+		</Module>
+		<Module Name="Shell32.dll">
+			<Api Name="SHCreateProcessAsUserW"/>
+			<Api Name="ShellExecuteA"/>
+			<Api Name="ShellExecuteExA"/>
+			<Api Name="ShellExecuteExW"/>
+			<Api Name="ShellExecuteW"/>
+		</Module>
+		<Module Name="User32.dll">
+			<Api Name="SetThreadDesktop"/>
+			<Api Name="UnregisterSuspendResumeNotification"/>
+		</Module>
+	</CaptureFilter>
+</ApiMonitor>
