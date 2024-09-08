@@ -5,12 +5,14 @@
 # This is using an I9-12900H
 # https://www.intel.com/content/www/us/en/products/sku/132214/intel-core-i912900h-processor-24m-cache-up-to-5-00-ghz/specifications.html
 
-$pcores = 6
+$pcores = 12
 $ecores = 8
 $vm_files = "C:\Users\$($env:USERNAME)\Documents\Virtual Machines"  # Change this to your appropriate path for Windows
 
 # Get all .vmx files in the directory and subdirectories
-$vm_configs = Get-ChildItem -Path $vm_files -Recurse -Filter "*.vmx" | Select-Object -ExpandProperty FullName
+$vm_configs = Get-ChildItem -Path $vm_files -Recurse -Filter "*.vmx" |
+    Where-Object { $_.Extension -eq ".vmx" } |
+    Select-Object -ExpandProperty FullName
 
 Write-Host "Found the configuration files for the following VMs"
 
