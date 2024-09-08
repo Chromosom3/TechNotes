@@ -6,8 +6,9 @@
 
 # This is using an I7-14700K 
 # https://www.intel.com/content/www/us/en/products/sku/236783/intel-core-i7-processor-14700k-33m-cache-up-to-5-60-ghz/specifications.html
+# Make sure to set pcores to pcores*2 because of hyper threading ecores don't use hyper threading.
 
-pcores=8
+pcores=16
 ecores=12
 vm_files="/media/shared/vmware/"
 
