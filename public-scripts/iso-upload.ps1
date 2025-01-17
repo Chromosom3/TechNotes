@@ -17,7 +17,7 @@ $content_lib = Get-ContentLibrary -Name $content_lib_name
 
 if (!$content_lib) {
     Write-Host "Content Library Not Found"
-    exit()
+    exit
 }
 
 
